@@ -4,6 +4,7 @@ import Model.History;
 import Model.Logs;
 import Model.Product;
 import Model.User;
+import static java.io.IO.print;
 import java.sql.Connection;
 import java.sql.DatabaseMetaData;
 import java.sql.DriverManager;
@@ -14,7 +15,7 @@ import java.util.ArrayList;
 public class SQLite {
     
     public int DEBUG_MODE = 0;
-    String driverURL = "jdbc:sqlite:" + "database.db";
+    public static String driverURL = "jdbc:sqlite:" + "database.db";
     
     public void createNewDatabase() {
         try (Connection conn = DriverManager.getConnection(driverURL)) {
@@ -25,6 +26,21 @@ public class SQLite {
         } catch (Exception ex) {
             System.out.print(ex);
         }
+    }
+    
+    public static String retrievePassword(String username){
+        String sql = "SELECT password FROM users WHERE username = '" + username + "';";
+        String password = null;
+        
+        try (Connection conn = DriverManager.getConnection(driverURL);
+            Statement stmt = conn.createStatement();
+            ResultSet rs = stmt.executeQuery(sql)){
+            
+            if (rs.next()) {
+                password = rs.getString("password");
+            }
+        } catch (Exception ex) {}
+        return password;
     }
     
     public void createHistoryTable() {
