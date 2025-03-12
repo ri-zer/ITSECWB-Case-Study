@@ -173,7 +173,7 @@ public class SQLite {
         }
     }
     
-    public void addLogs(String event, String username, String desc, String timestamp) {
+    public static void addLogs(String event, String username, String desc, String timestamp) {
         String sql = "INSERT INTO logs(event,username,desc,timestamp) VALUES('" + event + "','" + username + "','" + desc + "','" + timestamp + "')";
         
         try (Connection conn = DriverManager.getConnection(driverURL);

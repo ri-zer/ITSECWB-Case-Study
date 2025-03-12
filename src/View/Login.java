@@ -2,6 +2,8 @@
 package View;
 
 import Controller.SQLite;
+import java.sql.Timestamp;
+import java.util.Date;
 import javax.swing.JOptionPane;
 
 public class Login extends javax.swing.JPanel {
@@ -98,9 +100,11 @@ public class Login extends javax.swing.JPanel {
             JOptionPane.showMessageDialog(this, "Please enter username and password.");
         }
         else if(SQLite.retrievePassword(username) != null && SQLite.retrievePassword(username).equals(password)){
+            SQLite.addLogs("NOTICE", username, "User successfully logged in.", (new Timestamp(new Date().getTime())).toString());
             frame.mainNav();
         }
         else{
+            SQLite.addLogs("NOTICE", username, "User failed to login.", (new Timestamp(new Date().getTime())).toString());
             JOptionPane.showMessageDialog(this, "Invalid username and/or password.");
         }
     }//GEN-LAST:event_loginBtnActionPerformed
