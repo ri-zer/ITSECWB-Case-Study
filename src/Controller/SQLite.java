@@ -8,6 +8,7 @@ import static java.io.IO.print;
 import java.sql.Connection;
 import java.sql.DatabaseMetaData;
 import java.sql.DriverManager;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.Statement;
 import java.util.ArrayList;
@@ -29,15 +30,17 @@ public class SQLite {
     }
     
     public static String retrievePassword(String username){
-        String sql = "SELECT password FROM users WHERE username = '" + username + "';";
+        String sql = "SELECT password FROM users WHERE username = ?;";
         String password = null;
         
         try (Connection conn = DriverManager.getConnection(driverURL);
-            Statement stmt = conn.createStatement();
-            ResultSet rs = stmt.executeQuery(sql)){
+            PreparedStatement pstmt = conn.prepareStatement(sql)) {
+            pstmt.setString(1, username);
             
-            if (rs.next()) {
-                password = rs.getString("password");
+            try (ResultSet rs = pstmt.executeQuery()) {
+                if (rs.next()) {
+                    password = rs.getString("password");
+                }
             }
         } catch (Exception ex) {}
         return password;
@@ -174,11 +177,15 @@ public class SQLite {
     }
     
     public static void addLogs(String event, String username, String desc, String timestamp) {
-        String sql = "INSERT INTO logs(event,username,desc,timestamp) VALUES('" + event + "','" + username + "','" + desc + "','" + timestamp + "')";
+        String sql = "INSERT INTO logs(event,username,desc,timestamp) VALUES(?,?,?,?)";
         
         try (Connection conn = DriverManager.getConnection(driverURL);
-            Statement stmt = conn.createStatement()){
-            stmt.execute(sql);
+            PreparedStatement pstmt = conn.prepareStatement(sql)){
+            pstmt.setString(1, event);
+            pstmt.setString(2, username);
+            pstmt.setString(3, desc);
+            pstmt.setString(4, timestamp);
+            pstmt.executeUpdate();
         } catch (Exception ex) {
             System.out.print(ex);
         }

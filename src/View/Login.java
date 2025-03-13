@@ -99,13 +99,16 @@ public class Login extends javax.swing.JPanel {
         if(username.isEmpty() || password.isEmpty()){
             JOptionPane.showMessageDialog(this, "Please enter username and password.");
         }
-        else if(SQLite.retrievePassword(username) != null && SQLite.retrievePassword(username).equals(password)){
-            SQLite.addLogs("NOTICE", username, "User successfully logged in.", (new Timestamp(new Date().getTime())).toString());
-            frame.mainNav();
-        }
-        else{
-            SQLite.addLogs("NOTICE", username, "User failed to login.", (new Timestamp(new Date().getTime())).toString());
-            JOptionPane.showMessageDialog(this, "Invalid username and/or password.");
+        else {
+            String retrievedPassword = SQLite.retrievePassword(username);
+            if(retrievedPassword != null && retrievedPassword.equals(password)){
+                SQLite.addLogs("LOGIN", username, "User successfully logged in.", (new Timestamp(new Date().getTime())).toString());
+                frame.mainNav();
+            }
+            else{
+                SQLite.addLogs("LOGIN", username, "User failed to login.", (new Timestamp(new Date().getTime())).toString());
+                JOptionPane.showMessageDialog(this, "Invalid username and/or password.");
+            }
         }
     }//GEN-LAST:event_loginBtnActionPerformed
 
