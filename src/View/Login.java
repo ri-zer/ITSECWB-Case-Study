@@ -9,6 +9,7 @@ import javax.swing.JOptionPane;
 public class Login extends javax.swing.JPanel {
 
     public Frame frame;
+    public int counter = 0;
     
     public Login() {
         initComponents();
@@ -93,22 +94,28 @@ public class Login extends javax.swing.JPanel {
         );
     }// </editor-fold>//GEN-END:initComponents
     private void loginBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_loginBtnActionPerformed
-        String username = usernameFld.getText();
-        String password = passwordFld.getText();
-        
-        if(username.isEmpty() || password.isEmpty()){
-            JOptionPane.showMessageDialog(this, "Please enter username and password.");
+        if(counter < 5){
+            String username = usernameFld.getText();
+            String password = passwordFld.getText();
+
+            if(username.isEmpty() || password.isEmpty()){
+                JOptionPane.showMessageDialog(this, "Please enter username and password.");
+            }
+            else {
+                String retrievedPassword = SQLite.retrievePassword(username);
+                if(retrievedPassword != null && retrievedPassword.equals(password)){
+                    SQLite.addLogs("LOGIN", username, "User successfully logged in.", (new Timestamp(new Date().getTime())).toString());
+                    frame.mainNav();
+                }
+                else{
+                    this.counter++;
+                    SQLite.addLogs("LOGIN", username, "User failed to login.", (new Timestamp(new Date().getTime())).toString());
+                    JOptionPane.showMessageDialog(this, "Invalid username and/or password.");
+                }
+            }
         }
-        else {
-            String retrievedPassword = SQLite.retrievePassword(username);
-            if(retrievedPassword != null && retrievedPassword.equals(password)){
-                SQLite.addLogs("LOGIN", username, "User successfully logged in.", (new Timestamp(new Date().getTime())).toString());
-                frame.mainNav();
-            }
-            else{
-                SQLite.addLogs("LOGIN", username, "User failed to login.", (new Timestamp(new Date().getTime())).toString());
-                JOptionPane.showMessageDialog(this, "Invalid username and/or password.");
-            }
+        else{
+            JOptionPane.showMessageDialog(this, "Maximum login attempts reached. Please try logging in again later.");
         }
     }//GEN-LAST:event_loginBtnActionPerformed
 
