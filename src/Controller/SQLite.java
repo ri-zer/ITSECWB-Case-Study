@@ -30,7 +30,7 @@ public class SQLite {
     }
     
     public static String retrievePassword(String username){
-        String sql = "SELECT password FROM users WHERE username = ?;";
+        String sql = "SELECT password FROM users WHERE LOWER(username) = LOWER(?);";
         String password = null;
         
         try (Connection conn = DriverManager.getConnection(driverURL);
