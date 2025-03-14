@@ -332,12 +332,11 @@ public class SQLite {
    
    public void addUser(String username, String password, int role) {
        String sql = "INSERT INTO users(username,password,role) VALUES(?,?,?)";
-       String hash = hashPassword(password);
        
        try (Connection conn = DriverManager.getConnection(driverURL);
            PreparedStatement pstmt = conn.prepareStatement(sql)){
            pstmt.setString(1, username);
-           pstmt.setString(2, hash);
+           pstmt.setString(2, hashPassword(password));
            pstmt.setInt(3, role);
            pstmt.executeUpdate();
        } catch (Exception ex) {
