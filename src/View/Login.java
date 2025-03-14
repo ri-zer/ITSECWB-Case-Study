@@ -14,7 +14,26 @@ public class Login extends javax.swing.JPanel {
     public Login() {
         initComponents();
     }
-
+    
+    private String hashPassword(String password) {
+       try {
+           java.security.MessageDigest md = java.security.MessageDigest.getInstance("SHA-256");
+           byte[] hash = md.digest(password.getBytes("UTF-8"));
+           StringBuilder hexString = new StringBuilder();
+           
+           for (byte b : hash) {
+               String hex = Integer.toHexString(0xff & b);
+               if (hex.length() == 1) hexString.append('0');
+               hexString.append(hex);
+           }
+           
+           return hexString.toString();
+       } catch (Exception ex) {
+           ex.printStackTrace();
+           return password; // Fallback to plaintext if hashing fails
+       }
+   }
+    
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
@@ -103,7 +122,9 @@ public class Login extends javax.swing.JPanel {
             }
             else {
                 String retrievedPassword = SQLite.retrievePassword(username);
-                if(retrievedPassword != null && retrievedPassword.equals(password)){
+                String hashedPassword = hashPassword(password);
+
+                if(retrievedPassword != null && retrievedPassword.equals(hashedPassword)){
                     SQLite.addLogs("LOGIN", username, "User successfully logged in.", (new Timestamp(new Date().getTime())).toString());
                     frame.mainNav();
                 }
