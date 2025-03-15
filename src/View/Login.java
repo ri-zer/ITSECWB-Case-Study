@@ -2,6 +2,7 @@
 package View;
 
 import Controller.SQLite;
+import static java.lang.Thread.sleep;
 import java.sql.Timestamp;
 import java.util.Date;
 import javax.swing.JOptionPane;
@@ -119,10 +120,15 @@ public class Login extends javax.swing.JPanel {
 
             if(username.isEmpty() || password.isEmpty()){
                 JOptionPane.showMessageDialog(this, "Please enter username and password.");
+                return;
             }
-            else {
+            
+            try{
                 String retrievedPassword = SQLite.retrievePassword(username);
                 String hashedPassword = hashPassword(password);
+                
+//                System.out.println("Hashed Input: " + hashedPassword);
+//                System.out.println("Stored Hash: " + retrievedPassword);
 
                 if(retrievedPassword != null && retrievedPassword.equals(hashedPassword)){
                     SQLite.addLogs("LOGIN", username, "User successfully logged in.", (new Timestamp(new Date().getTime())).toString());
@@ -133,7 +139,7 @@ public class Login extends javax.swing.JPanel {
                     SQLite.addLogs("LOGIN", username, "User failed to login.", (new Timestamp(new Date().getTime())).toString());
                     JOptionPane.showMessageDialog(this, "Invalid username and/or password.");
                 }
-            }
+            } catch(Exception ex){}
         }
         else{
             JOptionPane.showMessageDialog(this, "Maximum login attempts reached. Please try logging in again later.");
