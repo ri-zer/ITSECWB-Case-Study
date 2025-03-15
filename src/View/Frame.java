@@ -272,7 +272,7 @@ public class Frame extends javax.swing.JFrame {
        
        Timestamp timestamp = new Timestamp(new Date().getTime());
        SQLite.addLogs("REGISTER", username, "Registration attempt", timestamp.toString());
-       main.sqlite.addUser(username, password);
+       main.sqlite.addUser(username, password, 2);
        SQLite.addLogs("REGISTER", username, "User registration successful", timestamp.toString());
    }
 

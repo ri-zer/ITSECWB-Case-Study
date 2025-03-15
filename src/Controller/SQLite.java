@@ -235,18 +235,19 @@ public class SQLite {
        }
    }
    
-   public void addUser(String username, String password) {
-       String sql = "INSERT INTO users(username,password) VALUES(?,?)";
-       
-       try (Connection conn = DriverManager.getConnection(driverURL);
-           PreparedStatement pstmt = conn.prepareStatement(sql)){
-           pstmt.setString(1, username);
-           pstmt.setString(2, hashPassword(password));
-           pstmt.executeUpdate();
-       } catch (Exception ex) {
-           System.out.print(ex);
-       }
-   }
+   public void addUser(String username, String password, int role) {
+    String sql = "INSERT INTO users(username,password,role) VALUES(?,?,?)";
+    
+    try (Connection conn = DriverManager.getConnection(driverURL);
+         PreparedStatement pstmt = conn.prepareStatement(sql)){
+        pstmt.setString(1, username);
+        pstmt.setString(2, hashPassword(password));
+        pstmt.setInt(3, role);
+        pstmt.executeUpdate();
+    } catch (Exception ex) {
+        System.out.print(ex);
+    }
+}
    
    
    public ArrayList<History> getHistory(){
@@ -328,20 +329,6 @@ public class SQLite {
            }
        } catch (Exception ex) {}
        return users;
-   }
-   
-   public void addUser(String username, String password, int role) {
-       String sql = "INSERT INTO users(username,password,role) VALUES(?,?,?)";
-       
-       try (Connection conn = DriverManager.getConnection(driverURL);
-           PreparedStatement pstmt = conn.prepareStatement(sql)){
-           pstmt.setString(1, username);
-           pstmt.setString(2, hashPassword(password));
-           pstmt.setInt(3, role);
-           pstmt.executeUpdate();
-       } catch (Exception ex) {
-           System.out.print(ex);
-       }
    }
    
    public void removeUser(String username) {
