@@ -8,6 +8,7 @@ package View;
 import Controller.SQLite;
 import Model.History;
 import Model.Product;
+import Model.User;
 import java.util.ArrayList;
 import javax.swing.JOptionPane;
 import javax.swing.JTextField;
@@ -21,8 +22,9 @@ public class MgmtHistory extends javax.swing.JPanel {
 
     public SQLite sqlite;
     public DefaultTableModel tableModel;
+    private User user;
     
-    public MgmtHistory(SQLite sqlite, int role) {
+    public MgmtHistory(SQLite sqlite) {
         initComponents();
         this.sqlite = sqlite;
         tableModel = (DefaultTableModel)table.getModel();
@@ -37,21 +39,28 @@ public class MgmtHistory extends javax.swing.JPanel {
 //        UNCOMMENT TO DISABLE BUTTONS
         searchBtn.setVisible(false);
         reloadBtn.setVisible(false);
+    }
+
+    public void init(User user){
+        this.user = user;
         
-        if(role == 2 || role == 4){
+        if(this.user.getRole() == 2 || this.user.getRole() == 4){
             searchBtn.setVisible(true);
             reloadBtn.setVisible(true);
         }
-    }
-
-    public void init(){
 //      CLEAR TABLE
         for(int nCtr = tableModel.getRowCount(); nCtr > 0; nCtr--){
             tableModel.removeRow(0);
         }
         
 //      LOAD CONTENTS
-        ArrayList<History> history = sqlite.getHistory();
+        ArrayList<History> history = new ArrayList();
+        if(this.user.getRole() == 2){
+            history = sqlite.getUserHistory(this.user.getUsername());
+        }
+        else if(this.user.getRole() == 4){
+            history = sqlite.getHistory();
+        }
         for(int nCtr = 0; nCtr < history.size(); nCtr++){
             Product product = sqlite.getProduct(history.get(nCtr).getName());
             tableModel.addRow(new Object[]{
@@ -202,7 +211,7 @@ public class MgmtHistory extends javax.swing.JPanel {
     }//GEN-LAST:event_searchBtnActionPerformed
 
     private void reloadBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_reloadBtnActionPerformed
-        init();
+        init(this.user);
     }//GEN-LAST:event_reloadBtnActionPerformed
 
 

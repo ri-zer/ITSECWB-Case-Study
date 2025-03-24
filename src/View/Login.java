@@ -2,6 +2,7 @@
 package View;
 
 import Controller.SQLite;
+import Model.User;
 import java.sql.Timestamp;
 import java.util.Date;
 import javax.swing.JOptionPane;
@@ -113,10 +114,10 @@ public class Login extends javax.swing.JPanel {
         );
     }// </editor-fold>//GEN-END:initComponents
     private void loginBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_loginBtnActionPerformed
+        String username = usernameFld.getText();
+        String password = passwordFld.getText();
+        
         if(counter < 5){
-            String username = usernameFld.getText();
-            String password = passwordFld.getText();
-
             if(username.isEmpty() || password.isEmpty()){
                 JOptionPane.showMessageDialog(this, "Please enter username and password.");
             }
@@ -125,9 +126,16 @@ public class Login extends javax.swing.JPanel {
                 String hashedPassword = hashPassword(password);
 
                 if(retrievedPassword != null && retrievedPassword.equals(hashedPassword)){
-                    int role = SQLite.getRole(username);
-                    SQLite.addLogs("LOGIN", username, "User successfully logged in.", (new Timestamp(new Date().getTime())).toString());
-                    frame.mainNav(role);
+                    User user = SQLite.getUser(username);
+                    if(user.getLocked() == 1){
+                        this.counter++;
+                        SQLite.addLogs("LOGIN", username, "Locked user failed to login.", (new Timestamp(new Date().getTime())).toString());
+                        JOptionPane.showMessageDialog(this, "Invalid username and/or password.");
+                    }
+                    else{
+                        SQLite.addLogs("LOGIN", username, "User successfully logged in.", (new Timestamp(new Date().getTime())).toString());
+                        frame.mainNav(user);
+                    }
                 }
                 else{
                     this.counter++;

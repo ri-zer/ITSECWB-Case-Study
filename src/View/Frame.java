@@ -2,6 +2,7 @@ package View;
 
 import Controller.Main;
 import Controller.SQLite;
+import Model.User;
 import java.awt.BorderLayout;
 import java.awt.CardLayout;
 import java.awt.Dimension;
@@ -10,7 +11,7 @@ import java.util.Date;
 import javax.swing.WindowConstants;
 
 public class Frame extends javax.swing.JFrame {
-
+   private User user;
    public Frame() {
        initComponents();
    }
@@ -183,22 +184,22 @@ public class Frame extends javax.swing.JFrame {
    }// </editor-fold>//GEN-END:initComponents
 
    private void adminBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_adminBtnActionPerformed
-       adminHomePnl.showPnl("home");
+       adminHomePnl.showPnl("home", this.user);
        contentView.show(Content, "adminHomePnl");
    }//GEN-LAST:event_adminBtnActionPerformed
 
    private void managerBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_managerBtnActionPerformed
-       managerHomePnl.showPnl("home");
+       managerHomePnl.showPnl("home", this.user);
        contentView.show(Content, "managerHomePnl");
    }//GEN-LAST:event_managerBtnActionPerformed
 
    private void staffBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_staffBtnActionPerformed
-       staffHomePnl.showPnl("home");
+       staffHomePnl.showPnl("home", this.user);
        contentView.show(Content, "staffHomePnl");
    }//GEN-LAST:event_staffBtnActionPerformed
 
    private void clientBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_clientBtnActionPerformed
-       clientHomePnl.showPnl("home");
+       clientHomePnl.showPnl("home", this.user);
        contentView.show(Content, "clientHomePnl");
    }//GEN-LAST:event_clientBtnActionPerformed
 
@@ -256,25 +257,26 @@ public class Frame extends javax.swing.JFrame {
        managerBtn.setVisible(false);
    }
    
-   public void mainNav(int role){
+   public void mainNav(User user){
+       this.user = user;
        frameView.show(Container, "homePnl");
-       if(role == 2){
-           clientHomePnl.showPnl("home");
+       if(user.getRole() == 2){
+           clientHomePnl.showPnl("home", user);
            contentView.show(Content, "clientHomePnl");
            clientBtn.setVisible(true);
        }
-       else if(role == 3){
-           staffHomePnl.showPnl("home");
+       else if(user.getRole() == 3){
+           staffHomePnl.showPnl("home", user);
            contentView.show(Content, "staffHomePnl");
            staffBtn.setVisible(true);
        }
-       else if(role == 4){
-           managerHomePnl.showPnl("home");
+       else if(user.getRole() == 4){
+           managerHomePnl.showPnl("home", user);
            contentView.show(Content, "managerHomePnl");
            managerBtn.setVisible(true);
        }
-       else if(role == 5){
-           adminHomePnl.showPnl("home");
+       else if(user.getRole() == 5){
+           adminHomePnl.showPnl("home", user);
            contentView.show(Content, "adminHomePnl");
            adminBtn.setVisible(true);
        }

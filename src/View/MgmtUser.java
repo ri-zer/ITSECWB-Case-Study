@@ -24,12 +24,11 @@ public class MgmtUser extends javax.swing.JPanel {
 
     public SQLite sqlite;
     public DefaultTableModel tableModel;
-    private int role;
+    private User user;
     
-    public MgmtUser(SQLite sqlite, int role) {
+    public MgmtUser(SQLite sqlite) {
         initComponents();
         this.sqlite = sqlite;
-        this.role = role;
         tableModel = (DefaultTableModel)table.getModel();
         table.getTableHeader().setFont(new java.awt.Font("SansSerif", java.awt.Font.BOLD, 14));
         
@@ -38,16 +37,17 @@ public class MgmtUser extends javax.swing.JPanel {
         deleteBtn.setVisible(false);
         lockBtn.setVisible(false);
         chgpassBtn.setVisible(false);
+    }
+    
+    public void init(User user){
+        this.user = user;
         
-        if(this.role == 5){
+        if(this.user.getRole() == 5){
             editRoleBtn.setVisible(true);
             deleteBtn.setVisible(true);
             lockBtn.setVisible(true);
             chgpassBtn.setVisible(true);
         }
-    }
-    
-    public void init(){
         //      CLEAR TABLE
         for(int nCtr = tableModel.getRowCount(); nCtr > 0; nCtr--){
             tableModel.removeRow(0);
@@ -55,14 +55,10 @@ public class MgmtUser extends javax.swing.JPanel {
         
 //      LOAD CONTENTS
         ArrayList<User> users = new ArrayList();
-        if(this.role == 3){
-            users = sqlite.getClients();
-        }
-        else if(this.role == 4){
-            users = sqlite.getStaff();
-        }
-        else if(this.role == 5){
-            users = sqlite.getUsers();
+        switch(this.user.getRole()){
+            case (3): users = sqlite.getClients(); break;
+            case (4): users = sqlite.getStaff(); break;
+            case (5): users = sqlite.getUsers(); break;
         }
         
         for(int nCtr = 0; nCtr < users.size(); nCtr++){

@@ -7,6 +7,7 @@ package View;
 
 import Controller.SQLite;
 import Model.Logs;
+import Model.User;
 import java.util.ArrayList;
 import javax.swing.table.DefaultTableModel;
 
@@ -18,8 +19,9 @@ public class MgmtLogs extends javax.swing.JPanel {
 
     public SQLite sqlite;
     public DefaultTableModel tableModel;
+    private User user;
     
-    public MgmtLogs(SQLite sqlite, int role) {
+    public MgmtLogs(SQLite sqlite) {
         initComponents();
         this.sqlite = sqlite;
         tableModel = (DefaultTableModel)table.getModel();
@@ -28,14 +30,16 @@ public class MgmtLogs extends javax.swing.JPanel {
 //        UNCOMMENT TO DISABLE BUTTONS
         clearBtn.setVisible(false);
         debugBtn.setVisible(false);
+    }
+
+    public void init(User user){
+        this.user = user;
         
-        if(role == 5){
+        if(this.user.getRole() == 5){
             clearBtn.setVisible(true);
             debugBtn.setVisible(true);
         }
-    }
-
-    public void init(){
+        
         //      CLEAR TABLE
         for(int nCtr = tableModel.getRowCount(); nCtr > 0; nCtr--){
             tableModel.removeRow(0);

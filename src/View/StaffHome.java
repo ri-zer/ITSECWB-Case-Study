@@ -25,6 +25,7 @@ public class StaffHome extends javax.swing.JPanel {
     public MgmtLogs mgmtLogs;
     public MgmtProduct mgmtProduct;
     public MgmtUser mgmtUser;
+    private User user;
     
     private CardLayout contentView = new CardLayout();
     
@@ -33,10 +34,10 @@ public class StaffHome extends javax.swing.JPanel {
     }
     
     public void init(SQLite sqlite){
-        mgmtHistory = new MgmtHistory(sqlite, 3);
-        mgmtLogs = new MgmtLogs(sqlite, 3);
-        mgmtProduct = new MgmtProduct(sqlite, 3);
-        mgmtUser = new MgmtUser(sqlite, 3);
+        mgmtHistory = new MgmtHistory(sqlite);
+        mgmtLogs = new MgmtLogs(sqlite);
+        mgmtProduct = new MgmtProduct(sqlite);
+        mgmtUser = new MgmtUser(sqlite);
     
         Content.setLayout(contentView);
         Content.add(new Home("WELCOME STAFF!", new java.awt.Color(0,204,102)), "home");
@@ -52,7 +53,8 @@ public class StaffHome extends javax.swing.JPanel {
         logsBtn.setVisible(false);
     }
     
-    public void showPnl(String panelName){
+    public void showPnl(String panelName, User user){
+        this.user = user;
         contentView.show(Content, panelName);
     }
 
@@ -156,7 +158,7 @@ public class StaffHome extends javax.swing.JPanel {
     }// </editor-fold>//GEN-END:initComponents
 
     private void usersBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_usersBtnActionPerformed
-        mgmtUser.init();
+        mgmtUser.init(this.user);
         usersBtn.setForeground(Color.red);
         productsBtn.setForeground(Color.black);
         historyBtn.setForeground(Color.black);
@@ -165,7 +167,7 @@ public class StaffHome extends javax.swing.JPanel {
     }//GEN-LAST:event_usersBtnActionPerformed
 
     private void productsBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_productsBtnActionPerformed
-        mgmtProduct.init();
+        mgmtProduct.init(this.user);
         usersBtn.setForeground(Color.black);
         productsBtn.setForeground(Color.red);
         historyBtn.setForeground(Color.black);
@@ -174,7 +176,7 @@ public class StaffHome extends javax.swing.JPanel {
     }//GEN-LAST:event_productsBtnActionPerformed
 
     private void historyBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_historyBtnActionPerformed
-        mgmtHistory.init();
+        mgmtHistory.init(this.user);
         usersBtn.setForeground(Color.black);
         productsBtn.setForeground(Color.black);
         historyBtn.setForeground(Color.red);
@@ -183,7 +185,7 @@ public class StaffHome extends javax.swing.JPanel {
     }//GEN-LAST:event_historyBtnActionPerformed
 
     private void logsBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_logsBtnActionPerformed
-        mgmtLogs.init();
+        mgmtLogs.init(this.user);
         usersBtn.setForeground(Color.black);
         productsBtn.setForeground(Color.black);
         historyBtn.setForeground(Color.black);

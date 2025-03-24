@@ -252,21 +252,42 @@ public class SQLite {
        }
    }
    
-   public void addUser(String username, String password, int role) {
-    String sql = "INSERT INTO users(username,password,role) VALUES(?,?,?)";
-    
-    try (Connection conn = DriverManager.getConnection(driverURL);
-         PreparedStatement pstmt = conn.prepareStatement(sql)){
-        pstmt.setString(1, username);
-        pstmt.setString(2, hashPassword(password));
-        pstmt.setInt(3, role);
-        pstmt.executeUpdate();
-    } catch (Exception ex) {
-        System.out.print(ex);
+    public void addUser(String username, String password, int role) {
+        String sql = "INSERT INTO users(username,password,role) VALUES(?,?,?)";
+
+        try (Connection conn = DriverManager.getConnection(driverURL);
+             PreparedStatement pstmt = conn.prepareStatement(sql)){
+             pstmt.setString(1, username);
+             pstmt.setString(2, hashPassword(password));
+             pstmt.setInt(3, role);
+             pstmt.executeUpdate();
+        } catch (Exception ex) {
+             System.out.print(ex);
+        }
     }
-}
    
-   
+    public ArrayList<History> getUserHistory(String username){
+       String sql = "SELECT id, username, name, stock, timestamp FROM history WHERE username = ?";
+       ArrayList<History> histories = new ArrayList<History>();
+       
+       try (Connection conn = DriverManager.getConnection(driverURL);
+           PreparedStatement pstmt = conn.prepareStatement(sql)) {
+           pstmt.setString(1, username);
+           
+           try (ResultSet rs = pstmt.executeQuery()) {
+                while (rs.next()) {
+                histories.add(new History(rs.getInt("id"),
+                                  rs.getString("username"),
+                                  rs.getString("name"),
+                                  rs.getInt("stock"),
+                                  rs.getString("timestamp")));
+                }
+           }
+       } catch (Exception ex) {}
+       
+       return histories;
+   }
+    
    public ArrayList<History> getHistory(){
        String sql = "SELECT id, username, name, stock, timestamp FROM history";
        ArrayList<History> histories = new ArrayList<History>();
@@ -416,4 +437,24 @@ public class SQLite {
        }
        return product;
    }
+   
+    public static User getUser(String username){
+        String sql = "SELECT id, password, role, locked FROM users WHERE username=?";
+        User user = null;
+        try (Connection conn = DriverManager.getConnection(driverURL);
+            PreparedStatement pstmt = conn.prepareStatement(sql)) {
+            pstmt.setString(1, username);
+            ResultSet rs = pstmt.executeQuery();
+            if (rs.next()) {
+                user = new User(rs.getInt("id"),
+                                username,
+                                rs.getString("password"),
+                                rs.getInt("role"),
+                                rs.getInt("locked"));
+            }
+        } catch (Exception ex) {
+            System.out.print(ex);
+        }
+        return user;
+    }
 }
