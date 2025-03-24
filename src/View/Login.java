@@ -125,8 +125,9 @@ public class Login extends javax.swing.JPanel {
                 String hashedPassword = hashPassword(password);
 
                 if(retrievedPassword != null && retrievedPassword.equals(hashedPassword)){
+                    int role = SQLite.getRole(username);
                     SQLite.addLogs("LOGIN", username, "User successfully logged in.", (new Timestamp(new Date().getTime())).toString());
-                    frame.mainNav();
+                    frame.mainNav(role);
                 }
                 else{
                     this.counter++;

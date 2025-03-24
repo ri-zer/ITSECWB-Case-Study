@@ -28,6 +28,23 @@ public class SQLite {
        }
    }
    
+   public static int getRole(String username){
+       String sql = "SELECT role FROM users WHERE LOWER(username) = LOWER(?);";
+       int role = 0;
+       
+       try (Connection conn = DriverManager.getConnection(driverURL);
+               PreparedStatement pstmt = conn.prepareStatement(sql)){
+           pstmt.setString(1, username);
+           
+           try(ResultSet rs = pstmt.executeQuery()){
+               if(rs.next()){
+                   role = rs.getInt("role");
+               }
+           }
+       } catch (Exception ex) {}
+       return role;
+   }
+   
    public static String retrievePassword(String username){
        String sql = "SELECT password FROM users WHERE LOWER(username) = LOWER(?);";
        String password = null;

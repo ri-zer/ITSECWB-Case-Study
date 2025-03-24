@@ -204,6 +204,10 @@ public class Frame extends javax.swing.JFrame {
 
    private void logoutBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_logoutBtnActionPerformed
        frameView.show(Container, "loginPnl");
+       clientBtn.setVisible(false);
+       adminBtn.setVisible(false);
+       staffBtn.setVisible(false);
+       managerBtn.setVisible(false);
    }//GEN-LAST:event_logoutBtnActionPerformed
 
    public Main main;
@@ -245,10 +249,38 @@ public class Frame extends javax.swing.JFrame {
        Content.add(clientHomePnl, "clientHomePnl");
        
        this.setVisible(true);
+       
+       clientBtn.setVisible(false);
+       adminBtn.setVisible(false);
+       staffBtn.setVisible(false);
+       managerBtn.setVisible(false);
    }
    
-   public void mainNav(){
+   public void mainNav(int role){
        frameView.show(Container, "homePnl");
+       if(role == 2){
+           clientHomePnl.showPnl("home");
+           contentView.show(Content, "clientHomePnl");
+           clientBtn.setVisible(true);
+       }
+       else if(role == 3){
+           staffHomePnl.showPnl("home");
+           contentView.show(Content, "staffHomePnl");
+           staffBtn.setVisible(true);
+       }
+       else if(role == 4){
+           managerHomePnl.showPnl("home");
+           contentView.show(Content, "managerHomePnl");
+           managerBtn.setVisible(true);
+       }
+       else if(role == 5){
+           adminHomePnl.showPnl("home");
+           contentView.show(Content, "adminHomePnl");
+           adminBtn.setVisible(true);
+       }
+       else{
+           frameView.show(Container, "loginPnl");  
+       }
    }
    
    public void loginNav(){
