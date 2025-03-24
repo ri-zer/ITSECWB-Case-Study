@@ -498,4 +498,29 @@ public class SQLite {
         
         return false;
     }
+    
+    public static boolean editProduct(String name, int stock, double price){
+        String sql = "UPDATE product SET name = ?, stock = ?, price = ? WHERE name = ?;";
+        
+        if(stock < 0 || price < 0.0 || name.isBlank()){
+            return false;
+        }
+        
+        try(Connection conn = DriverManager.getConnection(driverURL);
+                PreparedStatement pstmt = conn.prepareStatement(sql);){
+            
+            pstmt.setString(1, name);
+            pstmt.setInt(2, stock);
+            pstmt.setDouble(3, price);
+            pstmt.setString(4, name);
+            int rs = pstmt.executeUpdate();
+
+            if(rs > 0){
+                return true;
+            }
+            
+        } catch (Exception ex){};
+        
+        return false;
+    }
 }

@@ -235,9 +235,9 @@ public class MgmtProduct extends javax.swing.JPanel {
         double price = Double.parseDouble(priceFld.getText());
         
         if (result == JOptionPane.OK_OPTION && !(name.isBlank()) && stock > 0 && price > 0.0) {
-            System.out.println(nameFld.getText());
-            System.out.println(stockFld.getText());
-            System.out.println(priceFld.getText());
+//            System.out.println(nameFld.getText());
+//            System.out.println(stockFld.getText());
+//            System.out.println(priceFld.getText());
             
             SQLite.addProduct(name, stock, price);
             JOptionPane.showMessageDialog(this, "Product Added.");
@@ -260,11 +260,25 @@ public class MgmtProduct extends javax.swing.JPanel {
             };
 
             int result = JOptionPane.showConfirmDialog(null, message, "EDIT PRODUCT", JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE, null);
+            
+            String name = nameFld.getText();
+            int stock = Integer.parseInt(stockFld.getText());
+            double price = Double.parseDouble(priceFld.getText());
 
             if (result == JOptionPane.OK_OPTION) {
-                System.out.println(nameFld.getText());
-                System.out.println(stockFld.getText());
-                System.out.println(priceFld.getText());
+//                System.out.println(nameFld.getText());
+//                System.out.println(stockFld.getText());
+//                System.out.println(priceFld.getText());
+
+                  boolean success = SQLite.editProduct(name, stock, price);
+                  if(success){
+                      JOptionPane.showMessageDialog(this, "Product Edited Successfully.");
+                      SQLite.addLogs("EDIT PRODUCT", this.user.getUsername(), "Edited Product: " + name, (new Timestamp(new Date().getTime())).toString());
+                  }
+                  else{
+                      JOptionPane.showMessageDialog(this, "Failed to Edit Product.");
+                      SQLite.addLogs("EDIT PRODUCT", this.user.getUsername(), "Failed Edit Attempt For: " + name, (new Timestamp(new Date().getTime())).toString());
+                  }
             }
         }
     }//GEN-LAST:event_editBtnActionPerformed
