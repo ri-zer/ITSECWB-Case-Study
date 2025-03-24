@@ -215,7 +215,7 @@ public class SQLite {
        }
    }
    
-   public void addHistory(String username, String name, int stock, String timestamp) {
+   public static void addHistory(String username, String name, int stock, String timestamp) {
        String sql = "INSERT INTO history(username,name,stock,timestamp) VALUES('" + username + "','" + name + "','" + stock + "','" + timestamp + "')";
        
        try (Connection conn = DriverManager.getConnection(driverURL);
@@ -456,5 +456,43 @@ public class SQLite {
             System.out.print(ex);
         }
         return user;
+    }
+    
+    public static boolean purchaseProduct(String name, int quantity){
+        String stock_check = "SELECT stock FROM product WHERE name = ?;";
+        String purchase = "UPDATE product SET stock = stock - ? WHERE name = ?;";
+        
+        if(quantity < 0){
+            return false;
+        }
+        
+        try(Connection conn = DriverManager.getConnection(driverURL);
+                PreparedStatement stock = conn.prepareStatement(stock_check);
+                PreparedStatement buy = conn.prepareStatement(purchase)){
+            
+            stock.setString(1, name);
+            ResultSet rs = stock.executeQuery();
+            
+            if(!rs.next()){
+                return false;
+            }
+            
+            int availableStock = rs.getInt("stock");
+            
+            if(availableStock < quantity){
+                return false;
+            }
+            
+            buy.setInt(1, quantity);
+            buy.setString(2, name);
+            
+            int rs2 = buy.executeUpdate();
+            if(rs2 > 0){
+                return true;
+            }
+            
+        } catch (Exception ex){};
+        
+        return false;
     }
 }

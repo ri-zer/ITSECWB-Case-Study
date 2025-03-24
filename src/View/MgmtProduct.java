@@ -8,7 +8,9 @@ package View;
 import Controller.SQLite;
 import Model.Product;
 import Model.User;
+import java.sql.Timestamp;
 import java.util.ArrayList;
+import java.util.Date;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
@@ -189,14 +191,25 @@ public class MgmtProduct extends javax.swing.JPanel {
         if(table.getSelectedRow() >= 0){
             JTextField stockFld = new JTextField("0");
             designer(stockFld, "PRODUCT STOCK");
+            String name = tableModel.getValueAt(table.getSelectedRow(), 0).toString();
 
             Object[] message = {
-                "How many " + tableModel.getValueAt(table.getSelectedRow(), 0) + " do you want to purchase?", stockFld
+                "How many " + name + " do you want to purchase?", stockFld
             };
 
             int result = JOptionPane.showConfirmDialog(null, message, "PURCHASE PRODUCT", JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE, null);
-
-            if (result == JOptionPane.OK_OPTION) {
+            
+            int stock = Integer.parseInt(stockFld.getText());
+            if (result == JOptionPane.OK_OPTION && stock != 0) {
+                boolean success = SQLite.purchaseProduct(name, stock);
+                
+                if(success){
+                    JOptionPane.showMessageDialog(this, "Purchase was successful.");
+                    SQLite.addHistory(this.user.getUsername(), name, stock, (new Timestamp(new Date().getTime())).toString());
+                }
+                else{
+                    JOptionPane.showMessageDialog(this, "Purchase Failed.");
+                }
                 System.out.println(stockFld.getText());
             }
         }
