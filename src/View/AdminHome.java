@@ -33,10 +33,10 @@ public class AdminHome extends javax.swing.JPanel {
     }
     
     public void init(SQLite sqlite){
-        mgmtHistory = new MgmtHistory(sqlite);
-        mgmtLogs = new MgmtLogs(sqlite);
-        mgmtProduct = new MgmtProduct(sqlite);
-        mgmtUser = new MgmtUser(sqlite);
+        mgmtHistory = new MgmtHistory(sqlite, 5);
+        mgmtLogs = new MgmtLogs(sqlite, 5);
+        mgmtProduct = new MgmtProduct(sqlite, 5);
+        mgmtUser = new MgmtUser(sqlite, 5);
         
         Content.setLayout(contentView);
         Content.add(new Home("WELCOME ADMIN!", new java.awt.Color(51, 153, 255)), "home");

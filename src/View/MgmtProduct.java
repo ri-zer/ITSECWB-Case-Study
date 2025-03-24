@@ -22,17 +22,26 @@ public class MgmtProduct extends javax.swing.JPanel {
     public SQLite sqlite;
     public DefaultTableModel tableModel;
     
-    public MgmtProduct(SQLite sqlite) {
+    public MgmtProduct(SQLite sqlite, int role) {
         initComponents();
         this.sqlite = sqlite;
         tableModel = (DefaultTableModel)table.getModel();
         table.getTableHeader().setFont(new java.awt.Font("SansSerif", java.awt.Font.BOLD, 14));
 
 //        UNCOMMENT TO DISABLE BUTTONS
-//        purchaseBtn.setVisible(false);
-//        addBtn.setVisible(false);
-//        editBtn.setVisible(false);
-//        deleteBtn.setVisible(false);
+        purchaseBtn.setVisible(false);
+        addBtn.setVisible(false);
+        editBtn.setVisible(false);
+        deleteBtn.setVisible(false);
+        
+        if(role == 2){
+            purchaseBtn.setVisible(true);
+        }
+        else if(role == 3 || role == 4){
+            addBtn.setVisible(true);
+            editBtn.setVisible(true);
+            deleteBtn.setVisible(true);
+        }
     }
 
     public void init(){
