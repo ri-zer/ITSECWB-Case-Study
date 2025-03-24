@@ -423,6 +423,18 @@ public class SQLite {
        }
    }
    
+   public static void deleteProduct(String name) {
+       String sql = "DELETE FROM product WHERE name=?;";
+
+       try (Connection conn = DriverManager.getConnection(driverURL);
+           PreparedStatement pstmt = conn.prepareStatement(sql)) {
+           pstmt.setString(1, name);
+           pstmt.executeUpdate();
+       } catch (Exception ex) {
+           System.out.print(ex);
+       }
+   }
+   
    public Product getProduct(String name){
        String sql = "SELECT name, stock, price FROM product WHERE name=?";
        Product product = null;

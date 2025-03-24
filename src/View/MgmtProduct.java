@@ -287,8 +287,13 @@ public class MgmtProduct extends javax.swing.JPanel {
         if(table.getSelectedRow() >= 0){
             int result = JOptionPane.showConfirmDialog(null, "Are you sure you want to delete " + tableModel.getValueAt(table.getSelectedRow(), 0) + "?", "DELETE PRODUCT", JOptionPane.YES_NO_OPTION);
             
+            String name = tableModel.getValueAt(table.getSelectedRow(), 0).toString();
+            
             if (result == JOptionPane.YES_OPTION) {
-                System.out.println(tableModel.getValueAt(table.getSelectedRow(), 0));
+                //System.out.println(tableModel.getValueAt(table.getSelectedRow(), 0));
+                SQLite.deleteProduct(name);
+                JOptionPane.showMessageDialog(this, "Product Deleted.");
+                SQLite.addLogs("EDIT PRODUCT", this.user.getUsername(), "Product Deleted: " + name, (new Timestamp(new Date().getTime())).toString());
             }
         }
     }//GEN-LAST:event_deleteBtnActionPerformed
