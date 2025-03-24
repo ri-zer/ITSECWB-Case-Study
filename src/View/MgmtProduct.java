@@ -230,10 +230,18 @@ public class MgmtProduct extends javax.swing.JPanel {
 
         int result = JOptionPane.showConfirmDialog(null, message, "ADD PRODUCT", JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE, null);
 
-        if (result == JOptionPane.OK_OPTION) {
+        String name = nameFld.getText();
+        int stock = Integer.parseInt(stockFld.getText());
+        double price = Double.parseDouble(priceFld.getText());
+        
+        if (result == JOptionPane.OK_OPTION && !(name.isBlank()) && stock > 0 && price > 0.0) {
             System.out.println(nameFld.getText());
             System.out.println(stockFld.getText());
             System.out.println(priceFld.getText());
+            
+            SQLite.addProduct(name, stock, price);
+            JOptionPane.showMessageDialog(this, "Product Added.");
+            SQLite.addLogs("ADD PRODUCT", this.user.getUsername(), name + " (x" + stock + ") added to database.", (new Timestamp(new Date().getTime())).toString());
         }
     }//GEN-LAST:event_addBtnActionPerformed
 

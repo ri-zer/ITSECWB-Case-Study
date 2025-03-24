@@ -189,7 +189,15 @@ public class MgmtHistory extends javax.swing.JPanel {
             }
 
 //          LOAD CONTENTS
-            ArrayList<History> history = sqlite.getUserHistory(this.user.getUsername());
+            ArrayList<History> history = new ArrayList();
+            
+            if(this.user.getRole() == 2){
+                history = sqlite.getUserHistory(this.user.getUsername());
+            }
+            else if(this.user.getRole() == 4){
+                history = sqlite.getHistory();
+            }
+            
             for(int nCtr = 0; nCtr < history.size(); nCtr++){
                 if(searchFld.getText().contains(history.get(nCtr).getUsername()) || 
                    history.get(nCtr).getUsername().contains(searchFld.getText()) || 

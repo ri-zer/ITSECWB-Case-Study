@@ -241,12 +241,15 @@ public class SQLite {
        }
    }
    
-   public void addProduct(String name, int stock, double price) {
-       String sql = "INSERT INTO product(name,stock,price) VALUES('" + name + "','" + stock + "','" + price + "')";
+   public static void addProduct(String name, int stock, double price) {
+       String sql = "INSERT INTO product(name,stock,price) VALUES(?,?,?);";
        
        try (Connection conn = DriverManager.getConnection(driverURL);
-           Statement stmt = conn.createStatement()){
-           stmt.execute(sql);
+           PreparedStatement pstmt = conn.prepareStatement(sql)){
+           pstmt.setString(1, name);
+           pstmt.setInt(2, stock);
+           pstmt.setDouble(3, price);
+           pstmt.executeUpdate();
        } catch (Exception ex) {
            System.out.print(ex);
        }
