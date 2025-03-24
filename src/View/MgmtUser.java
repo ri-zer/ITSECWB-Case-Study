@@ -24,10 +24,12 @@ public class MgmtUser extends javax.swing.JPanel {
 
     public SQLite sqlite;
     public DefaultTableModel tableModel;
+    private int role;
     
     public MgmtUser(SQLite sqlite, int role) {
         initComponents();
         this.sqlite = sqlite;
+        this.role = role;
         tableModel = (DefaultTableModel)table.getModel();
         table.getTableHeader().setFont(new java.awt.Font("SansSerif", java.awt.Font.BOLD, 14));
         
@@ -37,7 +39,7 @@ public class MgmtUser extends javax.swing.JPanel {
         lockBtn.setVisible(false);
         chgpassBtn.setVisible(false);
         
-        if(role == 5){
+        if(this.role == 5){
             editRoleBtn.setVisible(true);
             deleteBtn.setVisible(true);
             lockBtn.setVisible(true);
@@ -52,7 +54,17 @@ public class MgmtUser extends javax.swing.JPanel {
         }
         
 //      LOAD CONTENTS
-        ArrayList<User> users = sqlite.getUsers();
+        ArrayList<User> users = new ArrayList();
+        if(this.role == 3){
+            users = sqlite.getClients();
+        }
+        else if(this.role == 4){
+            users = sqlite.getStaff();
+        }
+        else if(this.role == 5){
+            users = sqlite.getUsers();
+        }
+        
         for(int nCtr = 0; nCtr < users.size(); nCtr++){
             tableModel.addRow(new Object[]{
                 users.get(nCtr).getUsername(), 

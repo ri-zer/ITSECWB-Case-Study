@@ -348,6 +348,44 @@ public class SQLite {
        return users;
    }
    
+   public ArrayList<User> getClients(){
+       String sql = "SELECT id, username, password, role, locked FROM users WHERE role = '2';";
+       ArrayList<User> users = new ArrayList<User>();
+       
+       try (Connection conn = DriverManager.getConnection(driverURL);
+           Statement stmt = conn.createStatement();
+           ResultSet rs = stmt.executeQuery(sql)){
+           
+           while (rs.next()) {
+               users.add(new User(rs.getInt("id"),
+                                  rs.getString("username"),
+                                  rs.getString("password"),
+                                  rs.getInt("role"),
+                                  rs.getInt("locked")));
+           }
+       } catch (Exception ex) {}
+       return users;
+   }
+   
+   public ArrayList<User> getStaff(){
+       String sql = "SELECT id, username, password, role, locked FROM users WHERE role = '2' OR role = '3';";
+       ArrayList<User> users = new ArrayList<User>();
+       
+       try (Connection conn = DriverManager.getConnection(driverURL);
+           Statement stmt = conn.createStatement();
+           ResultSet rs = stmt.executeQuery(sql)){
+           
+           while (rs.next()) {
+               users.add(new User(rs.getInt("id"),
+                                  rs.getString("username"),
+                                  rs.getString("password"),
+                                  rs.getInt("role"),
+                                  rs.getInt("locked")));
+           }
+       } catch (Exception ex) {}
+       return users;
+   }
+   
    public void removeUser(String username) {
        String sql = "DELETE FROM users WHERE username=?";
 
