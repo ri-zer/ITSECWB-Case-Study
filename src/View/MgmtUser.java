@@ -7,7 +7,9 @@ package View;
 
 import Controller.SQLite;
 import Model.User;
+import java.sql.Timestamp;
 import java.util.ArrayList;
+import java.util.Date;
 import javax.swing.JComboBox;
 import javax.swing.JDialog;
 import javax.swing.JOptionPane;
@@ -203,9 +205,13 @@ public class MgmtUser extends javax.swing.JPanel {
             String result = (String) JOptionPane.showInputDialog(null, "USER: " + tableModel.getValueAt(table.getSelectedRow(), 0), 
                 "EDIT USER ROLE", JOptionPane.QUESTION_MESSAGE, null, options, options[(int)tableModel.getValueAt(table.getSelectedRow(), 2) - 1]);
             
-            if(result != null){
-                System.out.println(tableModel.getValueAt(table.getSelectedRow(), 0));
-                System.out.println(result.charAt(0));
+            String name = tableModel.getValueAt(table.getSelectedRow(), 0).toString();
+            
+            if(result != null && name != null){
+                int role = Character.getNumericValue(result.charAt(0));
+                SQLite.editRole(name, role);
+                JOptionPane.showMessageDialog(this, "Role changed.");
+                SQLite.addLogs("EDIT ROLE", this.user.getUsername(), "Edited Role for User " + name + " (" + role + ").", (new Timestamp(new Date().getTime())).toString());
             }
         }
     }//GEN-LAST:event_editRoleBtnActionPerformed

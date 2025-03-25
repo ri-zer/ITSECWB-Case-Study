@@ -241,18 +241,27 @@ public class SQLite {
        }
    }
    
-   public static void addProduct(String name, int stock, double price) {
+   public static boolean addProduct(String name, int stock, double price) {
        String sql = "INSERT INTO product(name,stock,price) VALUES(?,?,?);";
+       
+       if(name.isBlank() || stock < 0 || price < 0.0){
+           return false;
+       }
        
        try (Connection conn = DriverManager.getConnection(driverURL);
            PreparedStatement pstmt = conn.prepareStatement(sql)){
            pstmt.setString(1, name);
            pstmt.setInt(2, stock);
            pstmt.setDouble(3, price);
-           pstmt.executeUpdate();
+           int rs = pstmt.executeUpdate();
+           
+           if(rs > 0){
+               return true;
+           }
        } catch (Exception ex) {
            System.out.print(ex);
        }
+       return false;
    }
    
     public void addUser(String username, String password, int role) {
@@ -534,5 +543,17 @@ public class SQLite {
         } catch (Exception ex){};
         
         return false;
+    }
+    
+    public static void editRole(String username, int role){
+        String sql = "UPDATE users SET role = ? WHERE username = ?;";
+        
+        try(Connection conn = DriverManager.getConnection(driverURL);
+                PreparedStatement pstmt = conn.prepareStatement(sql);){
+            
+            pstmt.setInt(1, role);
+            pstmt.setString(2, username);
+            pstmt.executeUpdate();
+        } catch (Exception ex){};
     }
 }

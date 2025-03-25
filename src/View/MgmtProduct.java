@@ -234,14 +234,19 @@ public class MgmtProduct extends javax.swing.JPanel {
         int stock = Integer.parseInt(stockFld.getText());
         double price = Double.parseDouble(priceFld.getText());
         
-        if (result == JOptionPane.OK_OPTION && !(name.isBlank()) && stock > 0 && price > 0.0) {
+        if (result == JOptionPane.OK_OPTION) {
 //            System.out.println(nameFld.getText());
 //            System.out.println(stockFld.getText());
 //            System.out.println(priceFld.getText());
-            
-            SQLite.addProduct(name, stock, price);
-            JOptionPane.showMessageDialog(this, "Product Added.");
-            SQLite.addLogs("ADD PRODUCT", this.user.getUsername(), name + " (x" + stock + ") added to database.", (new Timestamp(new Date().getTime())).toString());
+            boolean success = SQLite.addProduct(name, stock, price);
+            if(success){
+                JOptionPane.showMessageDialog(this, "Product Added.");
+                SQLite.addLogs("ADD PRODUCT", this.user.getUsername(), name + " (x" + stock + ") added to database.", (new Timestamp(new Date().getTime())).toString());
+            }
+            else{
+                JOptionPane.showMessageDialog(this, "Failed to add product.");
+                SQLite.addLogs("ADD PRODUCT", this.user.getUsername(), "Failed to add product: " + name, (new Timestamp(new Date().getTime())).toString());
+            }
         }
     }//GEN-LAST:event_addBtnActionPerformed
 
@@ -276,7 +281,7 @@ public class MgmtProduct extends javax.swing.JPanel {
                       SQLite.addLogs("EDIT PRODUCT", this.user.getUsername(), "Edited Product: " + name, (new Timestamp(new Date().getTime())).toString());
                   }
                   else{
-                      JOptionPane.showMessageDialog(this, "Failed to Edit Product.");
+                      JOptionPane.showMessageDialog(this, "Failed to edit product.");
                       SQLite.addLogs("EDIT PRODUCT", this.user.getUsername(), "Failed Edit Attempt For: " + name, (new Timestamp(new Date().getTime())).toString());
                   }
             }
