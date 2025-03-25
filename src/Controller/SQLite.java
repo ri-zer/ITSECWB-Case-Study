@@ -485,7 +485,7 @@ public class SQLite {
         String stock_check = "SELECT stock FROM product WHERE name = ?;";
         String purchase = "UPDATE product SET stock = stock - ? WHERE name = ?;";
         
-        if(quantity < 0){
+        if(quantity < 1){
             return false;
         }
         
@@ -522,7 +522,7 @@ public class SQLite {
     public static boolean editProduct(String name, int stock, double price){
         String sql = "UPDATE product SET name = ?, stock = ?, price = ? WHERE name = ?;";
         
-        if(stock < 0 || price < 0.0 || name.isBlank()){
+        if(stock < 0 || price <= 0.0 || name.isBlank()){
             return false;
         }
         

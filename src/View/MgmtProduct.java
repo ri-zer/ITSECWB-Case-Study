@@ -210,7 +210,6 @@ public class MgmtProduct extends javax.swing.JPanel {
                 else{
                     JOptionPane.showMessageDialog(this, "Purchase Failed.");
                 }
-                System.out.println(stockFld.getText());
             }
         }
     }//GEN-LAST:event_purchaseBtnActionPerformed
