@@ -211,7 +211,7 @@ public class MgmtUser extends javax.swing.JPanel {
                 int role = Character.getNumericValue(result.charAt(0));
                 sqlite.editRole(name, role);
                 JOptionPane.showMessageDialog(this, "Role changed.");
-                SQLite.addLogs("EDIT ROLE", this.user.getUsername(), "Edited Role for User " + name + " (" + role + ").", (new Timestamp(new Date().getTime())).toString());
+                sqlite.addLogs("EDIT ROLE", this.user.getUsername(), "Edited Role for User " + name + " (" + role + ").", (new Timestamp(new Date().getTime())).toString());
             }
         }
     }//GEN-LAST:event_editRoleBtnActionPerformed
@@ -225,7 +225,7 @@ public class MgmtUser extends javax.swing.JPanel {
             if (result == JOptionPane.YES_OPTION) {
                 sqlite.removeUser(username);
                 JOptionPane.showMessageDialog(this, "User " + username + " has been deleted.");
-                SQLite.addLogs("DELETE USER", this.user.getUsername(), "Deleted User " + username + ".", (new Timestamp(new Date().getTime())).toString());
+                sqlite.addLogs("DELETE USER", this.user.getUsername(), "Deleted User " + username + ".", (new Timestamp(new Date().getTime())).toString());
             }
         }
     }//GEN-LAST:event_deleteBtnActionPerformed
@@ -239,8 +239,22 @@ public class MgmtUser extends javax.swing.JPanel {
             
             int result = JOptionPane.showConfirmDialog(null, "Are you sure you want to " + state + " " + tableModel.getValueAt(table.getSelectedRow(), 0) + "?", "DELETE USER", JOptionPane.YES_NO_OPTION);
             
+            String username = tableModel.getValueAt(table.getSelectedRow(), 0).toString();
+            int lock;
+            
             if (result == JOptionPane.YES_OPTION) {
-                System.out.println(tableModel.getValueAt(table.getSelectedRow(), 0));
+                if(state.equals("unlock")){
+                    lock = 0;
+                    SQLite.editRole(username, 2);
+                }
+                else{
+                    lock = 1;
+                    SQLite.editRole(username, lock);
+                }
+                
+                SQLite.lockUser(username, lock);
+                JOptionPane.showMessageDialog(this, "User " + username + " has been " + state + "ed.");
+                sqlite.addLogs(state.toUpperCase() + " USER", this.user.getUsername(), state.substring(0, 1).toUpperCase() + state.substring(1) + "ed user " + username + ".", (new Timestamp(new Date().getTime())).toString());
             }
         }
     }//GEN-LAST:event_lockBtnActionPerformed

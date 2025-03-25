@@ -555,4 +555,16 @@ public class SQLite {
             pstmt.executeUpdate();
         } catch (Exception ex){};
     }
+    
+    public static void lockUser(String username, int lock){
+        String sql = "UPDATE users SET locked = ? WHERE username = ?;";
+        
+        try(Connection conn = DriverManager.getConnection(driverURL);
+                PreparedStatement pstmt = conn.prepareStatement(sql);){
+            
+            pstmt.setInt(1, lock);
+            pstmt.setString(2, username);
+            pstmt.executeUpdate();
+        } catch (Exception ex){};
+    }
 }
