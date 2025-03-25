@@ -77,7 +77,7 @@ public class SQLite {
        return false; // Default to false if there's an error
    }
    
-   private String hashPassword(String password) {
+   public static String hashPassword(String password) {
        try {
            java.security.MessageDigest md = java.security.MessageDigest.getInstance("SHA-256");
            byte[] hash = md.digest(password.getBytes("UTF-8"));
@@ -563,6 +563,19 @@ public class SQLite {
                 PreparedStatement pstmt = conn.prepareStatement(sql);){
             
             pstmt.setInt(1, lock);
+            pstmt.setString(2, username);
+            pstmt.executeUpdate();
+        } catch (Exception ex){};
+    }
+    
+    public static void changePassword(String username, String password){
+        String hash = hashPassword(password);
+        String sql = "UPDATE users SET password = ? WHERE username = ?;";
+        
+        try(Connection conn = DriverManager.getConnection(driverURL);
+                PreparedStatement pstmt = conn.prepareStatement(sql);){
+            
+            pstmt.setString(1, hash);
             pstmt.setString(2, username);
             pstmt.executeUpdate();
         } catch (Exception ex){};
