@@ -205,6 +205,7 @@ public class Frame extends javax.swing.JFrame {
 
    private void logoutBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_logoutBtnActionPerformed
        frameView.show(Container, "loginPnl");
+       SQLite.addLogs("LOGOUT", this.user.getUsername(), "User Logged Out.", (new Timestamp(new Date().getTime())).toString());
        clientBtn.setVisible(false);
        adminBtn.setVisible(false);
        staffBtn.setVisible(false);
