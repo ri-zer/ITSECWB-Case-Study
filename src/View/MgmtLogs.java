@@ -8,7 +8,10 @@ package View;
 import Controller.SQLite;
 import Model.Logs;
 import Model.User;
+import java.sql.Timestamp;
 import java.util.ArrayList;
+import java.util.Date;
+import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 
 /**
@@ -144,7 +147,13 @@ public class MgmtLogs extends javax.swing.JPanel {
     }// </editor-fold>//GEN-END:initComponents
 
     private void clearBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_clearBtnActionPerformed
+        int result = JOptionPane.showConfirmDialog(null, "Are you sure you want to clear logs?", "CLEAR LOGS", JOptionPane.YES_NO_OPTION);
         
+        if(result == JOptionPane.YES_OPTION){
+            SQLite.clearLogs();
+            JOptionPane.showMessageDialog(this, "Logs have been cleared.");
+            sqlite.addLogs("CLEAR LOGS", this.user.getUsername(), "Cleared Logs.", (new Timestamp(new Date().getTime())).toString());
+        }
     }//GEN-LAST:event_clearBtnActionPerformed
 
     private void debugBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_debugBtnActionPerformed

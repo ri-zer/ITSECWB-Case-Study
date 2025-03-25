@@ -580,4 +580,14 @@ public class SQLite {
             pstmt.executeUpdate();
         } catch (Exception ex){};
     }
+    
+    public static void clearLogs(){
+        String sql = "DELETE FROM logs;";
+        
+        try(Connection conn = DriverManager.getConnection(driverURL);
+                Statement st = conn.createStatement();){
+
+            st.executeUpdate(sql);
+        } catch (Exception ex){};
+    }
 }
