@@ -209,7 +209,7 @@ public class MgmtUser extends javax.swing.JPanel {
             
             if(result != null && name != null){
                 int role = Character.getNumericValue(result.charAt(0));
-                SQLite.editRole(name, role);
+                sqlite.editRole(name, role);
                 JOptionPane.showMessageDialog(this, "Role changed.");
                 SQLite.addLogs("EDIT ROLE", this.user.getUsername(), "Edited Role for User " + name + " (" + role + ").", (new Timestamp(new Date().getTime())).toString());
             }
@@ -220,8 +220,12 @@ public class MgmtUser extends javax.swing.JPanel {
         if(table.getSelectedRow() >= 0){
             int result = JOptionPane.showConfirmDialog(null, "Are you sure you want to delete " + tableModel.getValueAt(table.getSelectedRow(), 0) + "?", "DELETE USER", JOptionPane.YES_NO_OPTION);
             
+            String username = tableModel.getValueAt(table.getSelectedRow(), 0).toString();
+            
             if (result == JOptionPane.YES_OPTION) {
-                System.out.println(tableModel.getValueAt(table.getSelectedRow(), 0));
+                sqlite.removeUser(username);
+                JOptionPane.showMessageDialog(this, "User " + username + " has been deleted.");
+                SQLite.addLogs("DELETE USER", this.user.getUsername(), "Deleted User " + username + ".", (new Timestamp(new Date().getTime())).toString());
             }
         }
     }//GEN-LAST:event_deleteBtnActionPerformed
