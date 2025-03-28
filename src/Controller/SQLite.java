@@ -568,17 +568,31 @@ public class SQLite {
         } catch (Exception ex){};
     }
     
-    public static void changePassword(String username, String password){
-        String hash = hashPassword(password);
-        String sql = "UPDATE users SET password = ? WHERE username = ?;";
+    public static void changePassword(String username, String password) {
+        // Hash password
+        String hashedPassword = hashPassword(password);
         
-        try(Connection conn = DriverManager.getConnection(driverURL);
-                PreparedStatement pstmt = conn.prepareStatement(sql);){
-            
-            pstmt.setString(1, hash);
+        String sql = "UPDATE users SET password = ? WHERE LOWER(username) = LOWER(?);";
+        
+        try (Connection conn = DriverManager.getConnection(driverURL);
+             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+            // Set hashed password
+            pstmt.setString(1, hashedPassword);
+            // Use case-insensitive comparison
             pstmt.setString(2, username);
             pstmt.executeUpdate();
-        } catch (Exception ex){};
+            
+            // Log successful password change
+            java.sql.Timestamp timestamp = new java.sql.Timestamp(new java.util.Date().getTime());
+            addLogs("SECURITY", "SYSTEM", "Password changed for user: " + username, timestamp.toString());
+        } catch (Exception ex) {
+            // Log error
+            System.err.println("Error changing password: " + ex.getMessage());
+            
+            // Log failed password change
+            java.sql.Timestamp timestamp = new java.sql.Timestamp(new java.util.Date().getTime());
+            addLogs("SECURITY", "SYSTEM", "Failed to change password for user: " + username, timestamp.toString());
+        }
     }
     
     public static void clearLogs(){
