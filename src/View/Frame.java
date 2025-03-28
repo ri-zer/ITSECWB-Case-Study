@@ -305,6 +305,7 @@ public class Frame extends javax.swing.JFrame {
            return;
        }
        
+       javax.swing.JOptionPane.showMessageDialog(null, "Account created.");
        Timestamp timestamp = new Timestamp(new Date().getTime());
        SQLite.addLogs("REGISTER", username, "Registration attempt", timestamp.toString());
        main.sqlite.addUser(username, password, 2);
