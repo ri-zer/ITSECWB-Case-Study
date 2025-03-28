@@ -153,6 +153,7 @@ public class MgmtLogs extends javax.swing.JPanel {
             SQLite.clearLogs();
             JOptionPane.showMessageDialog(this, "Logs have been cleared.");
             sqlite.addLogs("CLEAR LOGS", this.user.getUsername(), "Cleared Logs.", (new Timestamp(new Date().getTime())).toString());
+            init(this.user);
         }
     }//GEN-LAST:event_clearBtnActionPerformed
 

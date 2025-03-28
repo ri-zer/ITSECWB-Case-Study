@@ -260,6 +260,8 @@ public class MgmtProduct extends javax.swing.JPanel {
             JTextField stockFld = new JTextField("0");
             designer(stockFld, "PRODUCT QUANTITY");
             String name = tableModel.getValueAt(table.getSelectedRow(), 0).toString();
+            double price = Double.valueOf(tableModel.getValueAt(table.getSelectedRow(), 2).toString());
+            
             int availableStock = (int)tableModel.getValueAt(table.getSelectedRow(), 1);
 
             Object[] message = {
@@ -291,7 +293,7 @@ public class MgmtProduct extends javax.swing.JPanel {
                     if (success) {
                         JOptionPane.showMessageDialog(this, "Purchase was successful.");
                         SQLite.addHistory(this.user.getUsername(), name, quantity, 
-                            (new Timestamp(new Date().getTime())).toString());
+                            (new Timestamp(new Date().getTime())).toString(), price);
                         // Refresh the product list
                         init(this.user);
                     } else {
