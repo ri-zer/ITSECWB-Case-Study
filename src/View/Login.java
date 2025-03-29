@@ -133,6 +133,7 @@ public class Login extends javax.swing.JPanel {
                         JOptionPane.showMessageDialog(this, "Invalid username and/or password.");
                     }
                     else{
+                        this.counter = 0;
                         SQLite.addLogs("LOGIN", username, "User successfully logged in.", (new Timestamp(new Date().getTime())).toString());
                         frame.mainNav(user);
                     }
