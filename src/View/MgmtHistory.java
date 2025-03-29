@@ -208,8 +208,8 @@ public class MgmtHistory extends javax.swing.JPanel {
                         history.get(nCtr).getUsername(), 
                         history.get(nCtr).getName(), 
                         history.get(nCtr).getStock(), 
-                        product.getPrice(), 
-                        product.getPrice() * history.get(nCtr).getStock(), 
+                        history.get(nCtr).getPrice(), 
+                        history.get(nCtr).getPrice() * history.get(nCtr).getStock(), 
                         history.get(nCtr).getTimestamp()
                     });
                 }
