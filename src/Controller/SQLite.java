@@ -216,7 +216,7 @@ public class SQLite {
    }
    
    public static void addHistory(String username, String name, int stock, String timestamp, double price) {
-       String sql = "INSERT INTO history(username,name,stock,timestamp,price) VALUES('" + username + "','" + name + "','" + stock + "','" + timestamp + "','" + price + "')";
+       String sql = "INSERT INTO history(username,name,stock,timestamp,price) VALUES('" + username.toLowerCase() + "','" + name + "','" + stock + "','" + timestamp + "','" + price + "')";
        
        try (Connection conn = DriverManager.getConnection(driverURL);
            Statement stmt = conn.createStatement()){
@@ -232,7 +232,7 @@ public class SQLite {
        try (Connection conn = DriverManager.getConnection(driverURL);
            PreparedStatement pstmt = conn.prepareStatement(sql)){
            pstmt.setString(1, event);
-           pstmt.setString(2, username);
+           pstmt.setString(2, username.toLowerCase());
            pstmt.setString(3, desc);
            pstmt.setString(4, timestamp);
            pstmt.executeUpdate();
@@ -269,7 +269,7 @@ public class SQLite {
 
         try (Connection conn = DriverManager.getConnection(driverURL);
              PreparedStatement pstmt = conn.prepareStatement(sql)){
-             pstmt.setString(1, username);
+             pstmt.setString(1, username.toLowerCase());
              pstmt.setString(2, hashPassword(password));
              pstmt.setInt(3, role);
              pstmt.executeUpdate();
@@ -284,7 +284,7 @@ public class SQLite {
        
        try (Connection conn = DriverManager.getConnection(driverURL);
            PreparedStatement pstmt = conn.prepareStatement(sql)) {
-           pstmt.setString(1, username);
+           pstmt.setString(1, username.toLowerCase());
            
            try (ResultSet rs = pstmt.executeQuery()) {
                 while (rs.next()) {
