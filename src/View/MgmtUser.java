@@ -69,11 +69,8 @@ public class MgmtUser extends javax.swing.JPanel {
         
         //      LOAD CONTENTS based on role (RBAC)
         ArrayList<User> users = new ArrayList();
-        switch(this.user.getRole()){
-            case (3): users = sqlite.getClients(); break;  // Staff can see clients only
-            case (4): users = sqlite.getStaff(); break;    // Manager can see staff and clients
-            case (5): users = sqlite.getUsers(); break;    // Admin can see all users
-            default: return; // Other roles shouldn't see user data
+        if(this.user.getRole() == 5){
+            users = sqlite.getUsers(); // Admin can see all users
         }
         
         for(int nCtr = 0; nCtr < users.size(); nCtr++){
