@@ -38,10 +38,10 @@ public class MgmtLogs extends javax.swing.JPanel {
     public void init(User user){
         this.user = user;
         
-        if(this.user.getRole() == 5){
-            clearBtn.setVisible(true);
-            debugBtn.setVisible(true);
-        }
+//        if(this.user.getRole() == 5){
+//            clearBtn.setVisible(true);
+//            debugBtn.setVisible(true);
+//        }
         
         //      CLEAR TABLE
         for(int nCtr = tableModel.getRowCount(); nCtr > 0; nCtr--){
